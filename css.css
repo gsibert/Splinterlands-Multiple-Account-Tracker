@@ -1,0 +1,138 @@
+body
+{
+    counter-reset: Serial;           /* Set the Serial counter to 0 */
+}
+
+.site {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    gap: 1em;
+    grid-template-columns: 1fr 1fr;
+}
+
+.header {
+    grid-row: 1/2;
+    background-color: black;
+    color: white;
+}
+
+.buttons {
+    grid-row: 2/1;
+}
+
+
+.footer {
+    grid-row: 4/1;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-left: 1em;
+    padding-right: 1em;
+
+}
+
+#main {
+    overflow-x:auto;
+}
+
+/*nav*/
+.main-nav ul {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+    background-color: gray;
+    position: -webkit-sticky;
+    position: sticky;
+}
+
+.main-nav li {
+    flex-grow: 1;
+    text-align: center;
+    
+}
+
+.main-nav a {
+	display: block;
+	padding: .4rem 1em;
+	color: white;
+	text-decoration: none;
+    
+}
+
+.main-nav a:focus,
+.main-nav a:hover {
+	text-decoration: underline;
+}
+
+.right {
+    float: right;
+}
+
+.add {
+    background-color: #45a049;
+    display: block;
+    width: 5%;    
+}
+
+.refresh {
+    background-color: darkcyan;
+    display: block;
+    width: 5%;
+}
+
+
+/*footer*/
+.footer {
+    padding: 5px 0px;
+    color:white;
+    text-align: center;
+    background: black;
+    width: 100%;
+    letter-spacing: 2px;
+}
+
+/*table*/
+table
+{
+    border-collapse: separate;
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+}
+
+tr td:first-child:before
+{
+  counter-increment: Serial;      /* Increment the Serial counter */
+  content: counter(Serial); /* Display the counter */
+}
+
+#jsonTable tr:nth-child(even) {
+  background-color: #eee;
+}
+#jsonTable tr:nth-child(odd) {
+ background-color: #fff;
+}
+#jsonTable th {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+
+#jsonTable {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+    border: 1px solid black;
+    border-collapse: collapse;
+}    
+
+
