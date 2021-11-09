@@ -89,13 +89,27 @@ async function createTable(player) {
             }
             console.log(player + " wins " + winCount + " times, and " + drawCount + " draws. " + player + "'s winrate is " + ((winCount/50)*100) + "%. Last Battle was " + dateTimeAgo)
             console.log(decEarned);
-            var winRateCell = row.insertCell(10);
-            lastBattleCell = row.insertCell(11);
-            actionCell = row.insertCell(12);
+            
+            try {
+              winRateCell = row.insertCell(10);
+              lastBattleCell = row.insertCell(11);
+              actionCell = row.insertCell(12);
 
-            winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
-            lastBattleCell.innerHTML = dateTimeAgo;
-            actionCell.innerHTML = action;
+              winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
+              lastBattleCell.innerHTML = dateTimeAgo;
+              actionCell.innerHTML = action;
+            } catch {
+              console.log("!!!!there was error with the initial excution waiting for 1 sec to try again!!!")
+              setTimeout(function(){
+                winRateCell = row.insertCell(10);
+                lastBattleCell = row.insertCell(11);
+                actionCell = row.insertCell(12);
+
+                winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
+                lastBattleCell.innerHTML = dateTimeAgo;
+                actionCell.innerHTML = action;
+              }, 1000 );
+            }
         });
       });
 }
