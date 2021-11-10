@@ -1,5 +1,5 @@
 function main(){
-   /* This is working for local run only
+   /* This is working for local run only - might not work anymore with the change in functions
    $.getJSON('src/users.json').done(function(data){ 
       
       for (var i = 0; i < data.length; i++) {
@@ -10,13 +10,12 @@ function main(){
    }); */
 
    //getWinRate("dadee");
-
+   
    let nextValue;
    for (let i = 0; i < localStorage.length; i++){
       nextValue = localStorage.getItem(localStorage.key(i));
       createTable(nextValue);
-}
-   
+   }
  
 }
 

@@ -1,51 +1,48 @@
 /* To do:
-    * Add winrate and last battle time
+    * Add winrate and last battle time -done
     * Add individual player details tab
     * In individual player add both last 50 battles and overall, for main just the last 50 battles 
-    * localStorage
-    * Add Private API tab
+    * localStorage - do not allow undefined - done
+    * add summary of accounts functions
+    * add validation error css
 */
 
 function addLocalStorage(){
-    //get the input
+    //get the input - update 1.2 the agent 
     var usernameInput = document.getElementById("uname");
-    console.log(usernameInput.value);
-    var x = localStorage.length;
-    console.log(x)
-    
+    //console.log(usernameInput.value);
+    //use this for total accounts
+    var totalAccounts = localStorage.length;
+    //console.log(x)
+
+    let playerData = getPlayerData(usernameInput.value);
+    playerData.then((data) => {
+        //console.log(!(data.name === undefined))
+        if (!(data.name === undefined)) {
+            //clear error message
+            document.getElementById("error-message").innerHTML = "";
+            //add row
+            createTable(usernameInput.value);
+            //create key and value using userinput
+            localStorage.setItem(usernameInput.value, usernameInput.value);
+            //clear the value of input
+            usernameInput.value = "";
+            alert("Success! User has been added")
+        } else {
+            //return error message to user
+            document.getElementById("error-message").innerHTML = "Invalid Username. ";
+        }
+    })
     //localStorage.clear();
-    //set the username as key
-    if (usernameInput.value != "") {
-        localStorage.setItem(usernameInput.value, usernameInput.value);
-        document.getElementById("error-message").innerHTML = "";
-        createTable(usernameInput.value);
-        usernameInput.value = "";
-    } else {
-        document.getElementById("error-message").innerHTML = "Username could not be empty. ";
-    }
-    //localStorage.setItem(usernameInput.value, 'account')
-    
+    //localStorage.setItem(usernameInput.value, 'account')*/    
 }
+
 
 function deleteLocalStorage(username){
     localStorage.removeItem(username);    
 }
 
-function getWinRate(user) {
-    $.getJSON('https://api2.splinterlands.com/battle/history?player=' + user, function(data) {
-    console.log('battle/history', data);    
-        winCount = 0;
-        drawCount = 0;
-        var dateTimeAgo = "";
-        for (var i = 0; i < data.battles.length; i++) {
-
-            var win = data.battles[i].winner;
-                
-            if(data.battles[i].winner == user){win = "!Winer!" + "[" + JSON.parse(data.battles[i].dec_info).reward.toFixed(2) + "DEC]"}
-            if(data.battles[i].winner == user){ winCount++}
-            if(data.battles[i].winner == "DRAW"){ drawCount++}
-            dateTimeAgo = moment(data.battles[0].created_date).fromNow();
-        }
-        console.log(user + " wins " + winCount + " times, and " + drawCount + " draws. " + user + "'s winrate is " + ((winCount/50)*100) + "%. Last Battle was " + dateTimeAgo)
-    });
+function clearLocalStorage(username){
+    localStorage.clear(username);
+    location.reload();
 }

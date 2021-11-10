@@ -1,117 +1,147 @@
-async function createTable(player) {
-  var tbl = document.getElementById("jsonTable"), player, playerTable = "",
-      api3 = 'https://game-api.splinterlands.io',
-      api2 = 'https://api.splinterlands.io',
-      api1 = 'https://api2.splinterlands.com',
-      api = api1;
+var api3 = 'https://game-api.splinterlands.io',
+    api2 = 'https://api.splinterlands.io',
+    api1 = 'https://api2.splinterlands.com',
+    api = api1;
 
-  await $.getJSON(`${api}/players/details?name=${player}`)
-      .done(function(data){
-        var username = data.name,
-        ecr = parseFloat(parseFloat(data.capture_rate)/10000*100).toFixed(2),
-        rank = league(data.league),
-        rating = data.rating,
-        power = data.collection_power;
-        
-        var row = tbl.insertRow(-1), 
+function createTable(player) {
+    var tbl = document.getElementById("jsonTable");
+    let playerBattleHistory = getBattleHistory(player);
+    let playerData = getPlayerData(player);
+    let playerBalance = getPlayerBalance(player);
+
+    Promise.all([playerData, playerBalance, playerBattleHistory]).then((data) => {
+      //let's do the magic here
+      
+      //player data
+      var username = data[0].name, 
+      ecr = parseFloat(parseFloat(data[0].capture_rate)/10000*100).toFixed(2),
+      rank = league(data[0].league),
+      rating = data[0].rating,
+      power = data[0].collection_power;
+
+      //player balance
+      try {
+        dec = data[1].find(x => x.token === 'DEC').balance
+      } catch {
+        dec = 0
+      }
+
+      try {
+            sps = data[1].find(x => x.token === 'SPS').balance;            
+      } catch {
+        sps = 0;
+      }
+      
+      try {
+            spsp = data[1].find(x => x.token === 'SPSP').balance
+      } catch {
+        spsp = 0
+      }
+      
+      try {
+            credits = data[1].find(x => x.token === 'CREDITS').balance
+      } catch {
+        credits = 0
+      }
+
+      //player battle history
+      var winCount = 0,
+      drawCount = 0,
+      decEarned = 0;
+      var dateTimeAgo = "",
+      action = `<button  onclick = "deleteRow(this)">delete</button>`;
+      for (var i = 0; i < data[2].battles.length; i++) {
+
+          var win = data[2].battles[i].winner;
+              
+          if(data[2].battles[i].winner == player){win = "!Winer!" + "[" + JSON.parse(data[2].battles[i].dec_info).reward.toFixed(2) + "DEC]"}
+          if(data[2].battles[i].winner == player){ winCount++ }
+          if(data[2].battles[i].winner == "DRAW"){ drawCount++ }
+          if(data[2].battles[i].winner == player){ decEarned += parseFloat(JSON.parse(data[2].battles[i].dec_info).reward.toFixed(2)) }
+          dateTimeAgo = moment(data[2].battles[0].created_date).fromNow();
+      }
+      console.log(player + " wins " + winCount + " times, and " + drawCount + " draws. " + player + "'s winrate is " + ((winCount/50)*100) + "%. Last Battle was " + dateTimeAgo);
+      
+      var row = tbl.insertRow(-1), 
         indexCell = row.insertCell(0),
         usernameCell = row.insertCell(1),
         ecrCell = row.insertCell(2),
         rankCell = row.insertCell(3),
         ratingCell = row.insertCell(4),
-        powerCell = row.insertCell(5);
+        powerCell = row.insertCell(5),
+        decCell = row.insertCell(6),
+        spsCell = row.insertCell(7),
+        spspCell = row.insertCell(8),
+        creditsCell = row.insertCell(9);
 
+        indexCell.innerHTML = '';
         usernameCell.innerHTML = username;
         ecrCell.innerHTML = ecr;
         rankCell.innerHTML = rank;
         ratingCell.innerHTML = rating;
         powerCell.innerHTML = power;
+        decCell.innerHTML = dec;
+        spsCell.innerHTML = sps;
+        spspCell.innerHTML = spsp;
+        creditsCell.innerHTML = credits;
+      
+      try {
+        winRateCell = row.insertCell(10);
+        lastBattleCell = row.insertCell(11);
+        actionCell = row.insertCell(12);
 
-        $.getJSON(`${api}/players/balances?username=${player}`)
-          .done(function(data_balances){
-            var dec = 0,
-                sps = 0,
-                spsp = 0,
-                credits = 0;
-            
-            try {
-                  dec = data_balances.find(x => x.token === 'DEC').balance
-            } catch {
-              dec = 0
-            }
+        winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
+        lastBattleCell.innerHTML = dateTimeAgo;
+        actionCell.innerHTML = action;
+      } catch {
+        console.log("!!!!there was error with the initial excution waiting for 1 sec to try again!!!")
+        setTimeout(function(){
+          winRateCell = row.insertCell(10);
+          lastBattleCell = row.insertCell(11);
+          actionCell = row.insertCell(12);
 
-            try {
-                  sps = data_balances.find(x => x.token === 'SPS').balance;            
-            } catch {
-              sps = 0;
-            }
-            
-            try {
-                  spsp = data_balances.find(x => x.token === 'SPSP').balance
-            } catch {
-              spsp = 0
-            }
-            
-            try {
-                  credits = data_balances.find(x => x.token === 'CREDITS').balance
-            } catch {
-              credits = 0
-            }
+          winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
+          lastBattleCell.innerHTML = dateTimeAgo;
+          actionCell.innerHTML = action;
+        }, 1000 );
+      }      
 
-            var decCell = row.insertCell(6),
-            spsCell = row.insertCell(7),
-            spspCell = row.insertCell(8),
-            creditsCell = row.insertCell(9);
 
-            decCell.innerHTML = dec;
-            spsCell.innerHTML = sps;
-            spspCell.innerHTML = spsp;
-            creditsCell.innerHTML = credits;
-            
-          });
+    });
+    
+}
 
-        $.getJSON('https://api2.splinterlands.com/battle/history?player=' + player, function(data) {
-            console.log('battle/history', data);    
-            var winCount = 0,
-            drawCount = 0,
-            decEarned = 0;
-            var dateTimeAgo = "",
-            action = `<button  onclick = "deleteRow(this)">delete</button>`;
-            for (var i = 0; i < data.battles.length; i++) {
 
-                var win = data.battles[i].winner;
-                    
-                if(data.battles[i].winner == player){win = "!Winer!" + "[" + JSON.parse(data.battles[i].dec_info).reward.toFixed(2) + "DEC]"}
-                if(data.battles[i].winner == player){ winCount++ }
-                if(data.battles[i].winner == "DRAW"){ drawCount++ }
-                if(data.battles[i].winner == player){ decEarned += parseFloat(JSON.parse(data.battles[i].dec_info).reward.toFixed(2)) }
-                dateTimeAgo = moment(data.battles[0].created_date).fromNow();
-            }
-            console.log(player + " wins " + winCount + " times, and " + drawCount + " draws. " + player + "'s winrate is " + ((winCount/50)*100) + "%. Last Battle was " + dateTimeAgo)
-            console.log(decEarned);
-            
-            try {
-              winRateCell = row.insertCell(10);
-              lastBattleCell = row.insertCell(11);
-              actionCell = row.insertCell(12);
+async function getPlayerData(player) {
+    let res;
+    try {
+        res = await $.getJSON(`${api}/players/details?name=${player}`);
+        return res;
+    } catch (error) {
+      console.error(error);
+    }    
+}
 
-              winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
-              lastBattleCell.innerHTML = dateTimeAgo;
-              actionCell.innerHTML = action;
-            } catch {
-              console.log("!!!!there was error with the initial excution waiting for 1 sec to try again!!!")
-              setTimeout(function(){
-                winRateCell = row.insertCell(10);
-                lastBattleCell = row.insertCell(11);
-                actionCell = row.insertCell(12);
 
-                winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
-                lastBattleCell.innerHTML = dateTimeAgo;
-                actionCell.innerHTML = action;
-              }, 1000 );
-            }
-        });
-      });
+async function getPlayerBalance(player) {
+  let res 
+  try {
+      res = await $.getJSON(`${api}/players/balances?username=${player}`);
+      return res;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+async function getBattleHistory(player) {
+  let res 
+  try {
+      res = $.getJSON(`${api}/battle/history?player=${player}`);
+      return res;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 
