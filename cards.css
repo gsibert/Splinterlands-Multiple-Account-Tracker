@@ -1,0 +1,34 @@
+.card {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 1rem;
+}
+
+
+.card a, a.card-content:visited, a.card-content:active {
+    text-decoration: none;
+    color: rgb(106, 129, 207);
+}
+
+.card-content {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    
+}
+
+img.card-content {
+    align-items: center;
+    width:100%;
+    height: auto;
+}
+
+p.card-content, a.card-content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.class > div.card:last-child {
+    margin: 0px 0px 16px;
+}
