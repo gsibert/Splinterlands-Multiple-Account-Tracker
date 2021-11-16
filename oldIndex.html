@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splinterlands Tracker by Decreo</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="src/api.js"></script>
+    <script src="src/rank.js"></script>
+    <script src="src/table.js"></script>
+    <script src="src/index.js"></script>
+    <script src="src/user.js"></script>
+    <!--add external css style here-->
+    <link rel="stylesheet" href="./css.css">
+    <link rel="stylesheet" href="./cards.css">
+</head>
+<body onload="main();">
+  <header class="header">
+    <h1>BETA 1.2! Next Update will have the summary of DEC and SPS Balance! Stay tuned!</h1>  
+    <!--This the the beta version or Decreo's Splinterland Dashboard for multiple account.
+        there will be more with this dashboard, like summary of assets, individual account view, mobile optimization, etc.
+        There some known bugs specially with getting the battle info, sometimes the cell range is not being recoginized
+        resulting to empty data, just refresh, it should should-->
+  </header> <!--header--> 
+
+  <main class="main">
+
+    <div class="card">
+      <!--buttons-->
+      <input type="button" tabindex="3" value="Clear all" class="right add" onclick="clearLocalStorage()" >
+      <input type="button" tabindex="2" id="add" value="Add" class="right add" onclick="addLocalStorage()" >
+      <input type="text" tabindex="1" id="uname" name="uname" class="right" placeholder="Hive username here">
+      <span id="error-message" class="right"></span>
+      
+      <!--main table-->
+      <table id="jsonTable">
+          <tr>
+              <th onclick="sortTableNumber(0)">#</th>
+              <th onclick="sortTable(1)">Username</th>
+              <th onclick="sortTableNumber(2)">ECR</th>
+              <th onclick="sortTable(3)">Rank</th>
+              <th onclick="sortTableNumber(4)">Rating</th>
+              <th onclick="sortTableNumber(5)">Power</th>
+              <th onclick="sortTableNumber(6)">In-game DEC</th>
+              <th onclick="sortTableNumber(7)">SPS</th>
+              <th onclick="sortTableNumber(8)">Staked SPS</th>
+              <th onclick="sortTable(9)">Last Team</th>
+              <th>Win Rate <p>(Last 50 Battles)</p></th>
+              <th>Last Battle</th>
+              <th>Action</th>
+          </tr>
+      </table>
+    </div>
+    
+  </main> 
+
+  <footer class="footer">
+    <p class=footer-info>
+      Developed by Decreo
+    </p>
+    <p>
+      For support and appreciation for this project you may donate DEC or SPS to @dadee or @decreo ingame or via hive blockchain
+    </p>
+    <p>
+      For questions and support, look for decreo#2564 in Splinterlands discord.
+    </p>
+  </footer>
+
+  <script>
+    /*when enter is pressed while inside the input username, the button will be trigger to add the account*/
+    var input = document.getElementById("uname");
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("add").click();
+      }
+    });
+  </script>
+
+</body>
+</html>

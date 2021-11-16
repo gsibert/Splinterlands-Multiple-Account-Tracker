@@ -1,3 +1,7 @@
+/*To do:
+  * change credits to Last played summoner or element
+*/
+
 var api3 = 'https://game-api.splinterlands.io',
     api2 = 'https://api.splinterlands.io',
     api1 = 'https://api2.splinterlands.com',
@@ -7,7 +11,7 @@ function createTable(player) {
     var tbl = document.getElementById("jsonTable");
     let playerBattleHistory = getBattleHistory(player);
     let playerData = getPlayerData(player);
-    let playerBalance = getPlayerBalance(player);
+    let playerBalance = getPlayerBalance(player); 
 
     Promise.all([playerData, playerBalance, playerBattleHistory]).then((data) => {
       //let's do the magic here
@@ -49,16 +53,55 @@ function createTable(player) {
       drawCount = 0,
       decEarned = 0;
       var dateTimeAgo = "",
-      action = `<button  onclick = "deleteRow(this)">delete</button>`;
+      action = `<button class="w3-red" onclick = "deleteRow(this)">delete</button>`,
+      team = "", wl= "";
+      
+      //this is to the if the you did not select a team
+      if(data[2].battles[0].winner == player){ wl = "WIN" } else { if(data[2].battles[0].winner != player || data[2].battles[0].winner != "DRAW") { wl = "LOSS" } }
+      if(data[2].battles[0].winner == "DRAW"){ wl = "DRAW" }
+      
+      try {
+        //console.log(JSON.parse(data[2].battles[i].details).team1.player)
+        if(JSON.parse(data[2].battles[0].details).team1.player == player){
+          team = lastTeam(JSON.parse(data[2].battles[0].details).team1.color) + " - " + wl        
+          console.log(team)
+        } else {
+          team = lastTeam(JSON.parse(data[2].battles[0].details).team2.color) + " - " + wl
+          console.log(team)
+        }
+      } catch (e) {
+        console.log(e)
+        try {
+          if(data[2].battles[0].winner == player){
+            console.log("The enemy did not pick a team or surrendered");
+            team = "The enemy did not pick a team <br>or surrendered - WIN";
+          } else {
+            console.log("You did not pick a team or you surrendered");
+            team = "You did not pick a team <br>or you surrendered - LOSS";
+          }
+        } catch (e) {
+          console.log(e);
+          if(JSON.parse(data[2].battles[0].details).winner == player) {
+            console.log("The enemy did not pick a team or surrendered");
+            team = "The enemy did not pick a team <br>or surrendered";
+          } else {
+            console.log("You did not pick a team or you surrendered");
+            team = "You did not pick a team <br>or you surrendered";
+          }
+        }        
+      }
+      
       for (var i = 0; i < data[2].battles.length; i++) {
 
-          var win = data[2].battles[i].winner;
-              
-          if(data[2].battles[i].winner == player){win = "!Winer!" + "[" + JSON.parse(data[2].battles[i].dec_info).reward.toFixed(2) + "DEC]"}
-          if(data[2].battles[i].winner == player){ winCount++ }
-          if(data[2].battles[i].winner == "DRAW"){ drawCount++ }
-          if(data[2].battles[i].winner == player){ decEarned += parseFloat(JSON.parse(data[2].battles[i].dec_info).reward.toFixed(2)) }
-          dateTimeAgo = moment(data[2].battles[0].created_date).fromNow();
+          //var win = data[2].battles[i].winner;
+          if(data[2].battles[i].winner == player){ winCount++; wl = "WIN" } else { if(data[2].battles[i].winner != player || data[2].battles[i].winner != "DRAW") { wl = "Loss" } }
+          if(data[2].battles[i].winner == "DRAW"){ drawCount++; wl = "DRAW" }
+          try {
+            if(data[2].battles[i].winner == player){ decEarned += parseFloat(JSON.parse(data[2].battles[i].reward_dec).toFixed(2))}
+          } catch (e) {
+              console.log(e)     
+          }
+            dateTimeAgo = moment(data[2].battles[0].created_date).fromNow();
       }
       console.log(player + " wins " + winCount + " times, and " + drawCount + " draws. " + player + "'s winrate is " + ((winCount/50)*100) + "%. Last Battle was " + dateTimeAgo);
       
@@ -72,25 +115,28 @@ function createTable(player) {
         decCell = row.insertCell(6),
         spsCell = row.insertCell(7),
         spspCell = row.insertCell(8),
-        creditsCell = row.insertCell(9);
+        lastTeamCell = row.insertCell(9);
 
         indexCell.innerHTML = '';
         usernameCell.innerHTML = username;
-        ecrCell.innerHTML = ecr;
+        ecrCell.innerHTML = ecr + "%";
         rankCell.innerHTML = rank;
         ratingCell.innerHTML = rating;
         powerCell.innerHTML = power;
         decCell.innerHTML = dec;
+        addBalance(dec,"dec");
         spsCell.innerHTML = sps;
+        addBalance(sps,"sps");
         spspCell.innerHTML = spsp;
-        creditsCell.innerHTML = credits;
+        addBalance(spsp,"spsp");
+        lastTeamCell.innerHTML = team;
       
       try {
         winRateCell = row.insertCell(10);
         lastBattleCell = row.insertCell(11);
         actionCell = row.insertCell(12);
 
-        winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
+        winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " <p>WinRate: " + ((winCount/50)*100).toFixed(2) + "% </p>" + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
         lastBattleCell.innerHTML = dateTimeAgo;
         actionCell.innerHTML = action;
       } catch {
@@ -108,7 +154,7 @@ function createTable(player) {
 
 
     });
-    
+    addBalance(1,"total-accounts")
 }
 
 
@@ -118,7 +164,7 @@ async function getPlayerData(player) {
         res = await $.getJSON(`${api}/players/details?name=${player}`);
         return res;
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }    
 }
 
@@ -129,7 +175,7 @@ async function getPlayerBalance(player) {
       res = await $.getJSON(`${api}/players/balances?username=${player}`);
       return res;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -140,7 +186,7 @@ async function getBattleHistory(player) {
       res = $.getJSON(`${api}/battle/history?player=${player}`);
       return res;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -148,6 +194,14 @@ async function getBattleHistory(player) {
 function deleteRow(r) {
   var i = r.parentNode.parentNode.rowIndex;
   var username = document.getElementById("jsonTable").rows[i].cells[1].innerHTML;
+  var dec = document.getElementById("jsonTable").rows[i].cells[6].innerHTML;
+  var sps = document.getElementById("jsonTable").rows[i].cells[7].innerHTML;
+  var spsp = document.getElementById("jsonTable").rows[i].cells[8].innerHTML;
+  deleteBalance(dec,"dec");
+  deleteBalance(sps,"sps");
+  deleteBalance(spsp,"spsp");
+  deleteBalance(1,"total-accounts");
+
   //console.log(username);
   deleteLocalStorage(username);
   document.getElementById("jsonTable").deleteRow(i);

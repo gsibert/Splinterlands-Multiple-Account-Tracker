@@ -7,6 +7,11 @@
     * add validation error css
 */
 
+var api3 = 'https://game-api.splinterlands.io',
+    api2 = 'https://api.splinterlands.io',
+    api1 = 'https://api2.splinterlands.com',
+    api = api1;
+
 function addLocalStorage(){
     //get the input - update 1.2 the agent 
     var usernameInput = document.getElementById("uname");
@@ -26,11 +31,12 @@ function addLocalStorage(){
             //create key and value using userinput
             localStorage.setItem(usernameInput.value, usernameInput.value);
             //clear the value of input
-            usernameInput.value = "";
+            usernameInput.value = "";  
             alert("Success! User has been added")
+            jsonPlayerBalance()
         } else {
             //return error message to user
-            document.getElementById("error-message").innerHTML = "Invalid Username. ";
+            alert("Invalid Username");
         }
     })
     //localStorage.clear();
@@ -46,3 +52,34 @@ function clearLocalStorage(username){
     localStorage.clear(username);
     location.reload();
 }
+
+function addBalance(balance,id) {
+    let targetContainer = document.getElementById(id).innerHTML
+    let targetFloat = parseFloat(targetContainer)
+    document.getElementById(id).innerHTML = parseFloat(targetFloat += balance).toFixed(2);
+}
+
+function deleteBalance(balance,id) {
+    let targetContainer = document.getElementById(id).innerHTML
+    let targetFloat = parseFloat(targetContainer)
+    document.getElementById(id).innerHTML = parseFloat(targetFloat -= balance).toFixed(2);
+}
+
+async function coinGecoPh(coinID,elementId,coinAmmount) {
+    var price = await $.getJSON(`https://api.coingecko.com/api/v3/coins/${coinID}`)
+	.then((data) => {return data.market_data.current_price.php}); 
+    console.log(price)
+    price = parseFloat(price);
+    priceInPhp = price * coinAmmount;
+    document.getElementById(elementId).innerHTML = price + " PHP"
+}
+
+async function coinGecoUsd(coinID,elementId,coinAmmount) {
+    var price = await $.getJSON(`https://api.coingecko.com/api/v3/coins/${coinID}`)
+	.then((data) => {return data.market_data.current_price.usd}); 
+    console.log(price);
+    price = parseFloat(price);
+    priceInUsd = price * coinAmmount;
+    document.getElementById(elementId).innerHTML = price + " USD";
+}
+
