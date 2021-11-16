@@ -11,7 +11,7 @@ function createTable(player) {
     var tbl = document.getElementById("jsonTable");
     let playerBattleHistory = getBattleHistory(player);
     let playerData = getPlayerData(player);
-    let playerBalance = getPlayerBalance(player);
+    let playerBalance = getPlayerBalance(player); 
 
     Promise.all([playerData, playerBalance, playerBattleHistory]).then((data) => {
       //let's do the magic here
@@ -53,11 +53,11 @@ function createTable(player) {
       drawCount = 0,
       decEarned = 0;
       var dateTimeAgo = "",
-      action = `<button class="delete" onclick = "deleteRow(this)">delete</button>`,
+      action = `<button class="w3-red" onclick = "deleteRow(this)">delete</button>`,
       team = "", wl= "";
       
       //this is to the if the you did not select a team
-      if(data[2].battles[0].winner == player){ wl = "WIN" } else { if(data[2].battles[0].winner != player || data[2].battles[0].winner != "DRAW") { wl = "LOST" } }
+      if(data[2].battles[0].winner == player){ wl = "WIN" } else { if(data[2].battles[0].winner != player || data[2].battles[0].winner != "DRAW") { wl = "LOSS" } }
       if(data[2].battles[0].winner == "DRAW"){ wl = "DRAW" }
       
       try {
@@ -77,7 +77,7 @@ function createTable(player) {
             team = "The enemy did not pick a team <br>or surrendered - WIN";
           } else {
             console.log("You did not pick a team or you surrendered");
-            team = "You did not pick a team <br>or you surrendered - LOST";
+            team = "You did not pick a team <br>or you surrendered - LOSS";
           }
         } catch (e) {
           console.log(e);
@@ -94,7 +94,7 @@ function createTable(player) {
       for (var i = 0; i < data[2].battles.length; i++) {
 
           //var win = data[2].battles[i].winner;
-          if(data[2].battles[i].winner == player){ winCount++; wl = "WIN" } else { if(data[2].battles[i].winner != player || data[2].battles[i].winner != "DRAW") { wl = "Lost" } }
+          if(data[2].battles[i].winner == player){ winCount++; wl = "WIN" } else { if(data[2].battles[i].winner != player || data[2].battles[i].winner != "DRAW") { wl = "Loss" } }
           if(data[2].battles[i].winner == "DRAW"){ drawCount++; wl = "DRAW" }
           try {
             if(data[2].battles[i].winner == player){ decEarned += parseFloat(JSON.parse(data[2].battles[i].reward_dec).toFixed(2))}
@@ -119,13 +119,16 @@ function createTable(player) {
 
         indexCell.innerHTML = '';
         usernameCell.innerHTML = username;
-        ecrCell.innerHTML = ecr;
+        ecrCell.innerHTML = ecr + "%";
         rankCell.innerHTML = rank;
         ratingCell.innerHTML = rating;
         powerCell.innerHTML = power;
         decCell.innerHTML = dec;
+        addBalance(dec,"dec");
         spsCell.innerHTML = sps;
+        addBalance(sps,"sps");
         spspCell.innerHTML = spsp;
+        addBalance(spsp,"spsp");
         lastTeamCell.innerHTML = team;
       
       try {
@@ -133,7 +136,7 @@ function createTable(player) {
         lastBattleCell = row.insertCell(11);
         actionCell = row.insertCell(12);
 
-        winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " \nWinRate: " + ((winCount/50)*100).toFixed(2) + "% " + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
+        winRateCell.innerHTML = "W: " + winCount + " D: " + drawCount + " L: " + (50 - winCount - drawCount) + " <p>WinRate: " + ((winCount/50)*100).toFixed(2) + "% </p>" + "<p>" + decEarned.toFixed(2) + " \nDEC Earned</p>"
         lastBattleCell.innerHTML = dateTimeAgo;
         actionCell.innerHTML = action;
       } catch {
@@ -151,7 +154,7 @@ function createTable(player) {
 
 
     });
-    
+    addBalance(1,"total-accounts")
 }
 
 
@@ -191,6 +194,14 @@ async function getBattleHistory(player) {
 function deleteRow(r) {
   var i = r.parentNode.parentNode.rowIndex;
   var username = document.getElementById("jsonTable").rows[i].cells[1].innerHTML;
+  var dec = document.getElementById("jsonTable").rows[i].cells[6].innerHTML;
+  var sps = document.getElementById("jsonTable").rows[i].cells[7].innerHTML;
+  var spsp = document.getElementById("jsonTable").rows[i].cells[8].innerHTML;
+  deleteBalance(dec,"dec");
+  deleteBalance(sps,"sps");
+  deleteBalance(spsp,"spsp");
+  deleteBalance(1,"total-accounts");
+
   //console.log(username);
   deleteLocalStorage(username);
   document.getElementById("jsonTable").deleteRow(i);

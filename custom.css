@@ -1,0 +1,37 @@
+#uname {
+    width: 20%;
+}
+
+.account-control {
+    display: flex;
+
+}
+
+body
+{
+    counter-reset: Serial;           /* Set the Serial counter to 0 */
+}
+
+tr td:first-child:before
+{
+  counter-increment: Serial;      /* Increment the Serial counter */
+  content: counter(Serial); /* Display the counter */
+}
+
+td {
+    text-align: center;
+}
+
+@media only screen and (max-width : 600px) {
+    #uname {
+        width: 50%;
+    }   
+}
+
+@media only screen and (min-width: 1000px) {
+    #uname {
+        width: 50%;
+    }  
+
+}
+
