@@ -57,7 +57,7 @@ function createTable(player) {
       team = "", wl= "";
       
       //this is to the if the you did not select a team
-      if(data[2].battles[0].winner == player){ wl = "WIN" } else { if(data[2].battles[0].winner != player || data[2].battles[0].winner != "DRAW") { wl = "LOSS" } }
+      if(data[2].battles[0].winner == player){ wl = "WIN" } else { if(data[2].battles[0].winner != player || data[2].battles[0].winner != "DRAW") { wl = "LOSE" } }
       if(data[2].battles[0].winner == "DRAW"){ wl = "DRAW" }
       
       try {
@@ -77,7 +77,7 @@ function createTable(player) {
             team = "The enemy did not pick a team <br>or surrendered - WIN";
           } else {
             console.log("You did not pick a team or you surrendered");
-            team = "You did not pick a team <br>or you surrendered - LOSS";
+            team = "You did not pick a team <br>or you surrendered - LOSE";
           }
         } catch (e) {
           console.log(e);
@@ -94,7 +94,7 @@ function createTable(player) {
       for (var i = 0; i < data[2].battles.length; i++) {
 
           //var win = data[2].battles[i].winner;
-          if(data[2].battles[i].winner == player){ winCount++; wl = "WIN" } else { if(data[2].battles[i].winner != player || data[2].battles[i].winner != "DRAW") { wl = "Loss" } }
+          if(data[2].battles[i].winner == player){ winCount++; wl = "WIN" } else { if(data[2].battles[i].winner != player || data[2].battles[i].winner != "DRAW") { wl = "LOSE" } }
           if(data[2].battles[i].winner == "DRAW"){ drawCount++; wl = "DRAW" }
           try {
             if(data[2].battles[i].winner == player){ decEarned += parseFloat(JSON.parse(data[2].battles[i].reward_dec).toFixed(2))}
