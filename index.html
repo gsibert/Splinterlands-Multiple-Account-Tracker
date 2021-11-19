@@ -36,21 +36,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
   <div class="w3-bar-block">
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Main Dashboard</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-dashboard fa-fw"></i>  Main Dashboard</a>
     <a href="#accounts-table" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Accounts</a>
+    <a href="#updates" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-pencil-square fa-fw"></i>  Updates</a>
     <a href="#" id="settings" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
-  <div class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red">
-    <h2><b>Updates:</b></h2>
-    <p>New look!</p>
-    <p>Added search functionality for accounts username</p>
-    <p>Added Dashboard. Show's the total DEC, SPS and Stake SPS. Still on process PHP and USD Prices</p>
-    <p>fixed bug that allow undefined accounts</p>
-    <p>Replace credits with Last Team. Using this you will be able to see if your bot did not submit a team,
-      this will also indicate if the opponent did not submit a team, in regular play it will show the last 
-      splinter team and if you win or loss.
-    </p><br>
-
-  </div>
   </div>
 </nav>
 
@@ -132,7 +121,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div class="w3-container" id="accounts-table">
     <h5><b><i class="fa fa-users"></i> Accounts:</b></h5>
     <div class="account-control">
-        <input type="text" tabindex="1" id="uname" name="uname" class="w3-input w3-border w3-round-large" placeholder="Hive username here">
+        <input type="text" tabindex="1" id="uname" name="uname" class="w3-input w3-border w3-round-large" placeholder="Hive username here. Enter multiple accounts separated by comma">
         <input type="button" tabindex="2" id="add" value="Add" class="w3-button w3-green" onclick="addLocalStorage()" >
         <input type="button" tabindex="3" value="Clear all" class="w3-button w3-red" onclick="clearLocalStorage()" >
         <span id="error-message"></span>
@@ -142,7 +131,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <input tabindex="4" class="w3-input w3-border w3-padding" type="text" placeholder="Search for username.." id="search" onkeyup="filter()">
           <tr class="w3-black">
               <th onclick="sortTableNumber(0)">#</th>
-              <th onclick="sortTable(1)">Username</th>
+              <th id="th-username" onclick="sortTable(1)">Username</th>
               <th onclick="sortTableNumber(2)">ECR</th>
               <th onclick="sortTable(3)">Rank</th>
               <th onclick="sortTableNumber(4)">Rating</th>
@@ -156,6 +145,28 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
               <th>Action</th>
           </tr>
       </table><br>
+    </div>
+  
+    <div id="updates" class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red">
+      <h2><b>Updates:</b></h2>
+
+      <h3><b>v2.0.1 Updates</b></h3>
+      <p>Added entering multiple accounts at once functionality. You could now
+        enter multiple accounts by separating it with comma, for example, if you want to enter "decreo" and "dadee",
+        just type "decreo,dadee".
+      </p>
+      <p>Moved the updates from the sidebar to the bottom of the page just before the footer, and added "Updates" in the main menu.</p>
+
+      <h3><b>v2.0 Updates</b></h3>
+      <p>New look!</p>
+      <p>Added search functionality for accounts username</p>
+      <p>Added Dashboard. Show's the total DEC, SPS and Stake SPS. Still on process PHP and USD Prices</p>
+      <p>fixed bug that allow undefined accounts</p>
+      <p>Replace credits with Last Team. Using this you will be able to see if your bot did not submit a team,
+        this will also indicate if the opponent did not submit a team, in regular play it will show the last 
+        splinter team and if you win or loss.
+      </p><br>
+  
     </div>
 
   <!-- Footer -->

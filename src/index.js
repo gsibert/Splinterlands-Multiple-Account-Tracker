@@ -16,7 +16,7 @@ function main(){
       nextValue = localStorage.getItem(localStorage.key(i));
       createTable(nextValue);
    }
-
+ 
 }
 
  /*To do:

@@ -155,6 +155,7 @@ function createTable(player) {
 
     });
     addBalance(1,"total-accounts")
+    
 }
 
 

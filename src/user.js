@@ -13,32 +13,33 @@ var api3 = 'https://game-api.splinterlands.io',
     api = api1;
 
 function addLocalStorage(){
-    //get the input - update 1.2 the agent 
+    //get the input
     var usernameInput = document.getElementById("uname");
     //console.log(usernameInput.value);
-    //use this for total accounts
-    var totalAccounts = localStorage.length;
-    //console.log(x)
-
-    let playerData = getPlayerData(usernameInput.value);
-    playerData.then((data) => {
-        //console.log(!(data.name === undefined))
-        if (!(data.name === undefined)) {
-            //clear error message
-            document.getElementById("error-message").innerHTML = "";
-            //add row
-            createTable(usernameInput.value);
-            //create key and value using userinput
-            localStorage.setItem(usernameInput.value, usernameInput.value);
-            //clear the value of input
-            usernameInput.value = "";  
-            alert("Success! User has been added")
-            jsonPlayerBalance()
-        } else {
-            //return error message to user
-            alert("Invalid Username");
-        }
-    })
+    //create an array from the input
+    var usernames = usernameInput.value.toString().split(",");
+    //console.log(usernames);
+    //loop thru the input to enter the account
+    for (let i = 0; i < usernames.length; i++) {
+        console.log(usernames[i] + "This is from the for loop")
+        let playerData = getPlayerData(usernames[i]);
+        playerData.then((data) => {
+            //console.log(!(data.name === undefined))
+            if (!(data.name === undefined)) {
+                //clear error message
+                document.getElementById("error-message").innerHTML = "";
+                //add row
+                createTable(usernames[i]);
+                //create key and value using userinput
+                localStorage.setItem(usernames[i], usernames[i]);
+            } else {
+                //return error message to user
+                alert(usernames[i] + " is not a valid username");
+            }
+        })
+    }
+    //clear the value of input
+    usernameInput.value = "";  
     //localStorage.clear();
     //localStorage.setItem(usernameInput.value, 'account')*/    
 }
@@ -71,7 +72,7 @@ async function coinGecoPh(coinID,elementId,coinAmmount) {
     console.log(price)
     price = parseFloat(price);
     priceInPhp = price * coinAmmount;
-    document.getElementById(elementId).innerHTML = price + " PHP"
+    document.getElementById(elementId).innerHTML = "(" + price + " PHP)"
 }
 
 async function coinGecoUsd(coinID,elementId,coinAmmount) {
@@ -80,6 +81,6 @@ async function coinGecoUsd(coinID,elementId,coinAmmount) {
     console.log(price);
     price = parseFloat(price);
     priceInUsd = price * coinAmmount;
-    document.getElementById(elementId).innerHTML = price + " USD";
+    document.getElementById(elementId).innerHTML = "(" + price + " USD)";
 }
 
