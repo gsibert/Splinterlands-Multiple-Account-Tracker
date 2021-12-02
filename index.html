@@ -16,6 +16,8 @@
 <script src="src/index.js"></script>
 <script src="src/user.js"></script>
 
+<!--for sorting-->
+
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
@@ -28,7 +30,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </div>
 
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:200px;" id="mySidebar"><br>
   
   <hr>
   <div class="w3-container">
@@ -39,7 +41,12 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-dashboard fa-fw"></i>  Main Dashboard</a>
     <a href="#accounts-table" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Accounts</a>
     <a href="#updates" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-pencil-square fa-fw"></i>  Updates</a>
-    <a href="#" id="settings" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+    <a href="#" id="settings" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a>
+    <label for="currency" class="fa fa-dollar fa-fw w3-padding"></label>
+    <select name="currency" id="currency">
+        <option value="usd">USD</option>
+        <option value="php">PHP</option>
+    </select>
   </div>
 </nav>
 
@@ -48,10 +55,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+<div class="w3-main" style="margin-left:200px;margin-top:43px;">
 
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
+    <div class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red">
+      <p><b>Important Notice: If you have used the previous version, you would need to add your accounts again</b></p> 
+    </div>
     <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
   </header>
 
@@ -61,6 +71,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
         <div class="w3-right accounts">
           <h3 id="total-accounts">0</h3>
+          <br>
         </div>
         <div class="w3-clear"></div>
         <h4>TOTAL ACCOUNTS</h4>
@@ -71,7 +82,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class="w3-left"><i class="fa fa-btc w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3 id="dec">0</h3>
-           
+          <span id="decCurrency">(0.00)</span>
         </div>
         <div class="w3-clear"></div>
         <h4>TOTAL DEC</h4>
@@ -82,6 +93,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class="w3-left"><i class="fa fa-btc w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3 id="sps">0</h3>
+          <span id="spsCurrency">(0.00)</span>
         </div>
         <div class="w3-clear"></div>
         <h4>TOTAL SPS</h4>
@@ -92,32 +104,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <div class="w3-left"><i class="fa fa-heart w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3 id="spsp">0</h3>
+          <span id="spspCurrency">(0.00)</span>
         </div>
         <div class="w3-clear"></div>
         <h4>TOTAL STAKED SPS</h4>
       </div>
     </div>
   </div>
-<!--
-  <div class="w3-container">
-    <h5>General Stats</h5>
-    <p>New Visitors</p>
-    <div class="w3-grey">
-      <div class="w3-container w3-center w3-padding w3-green" style="width:25%">+25%</div>
-    </div>
 
-    <p>New Users</p>
-    <div class="w3-grey">
-      <div class="w3-container w3-center w3-padding w3-orange" style="width:50%">50%</div>
-    </div>
-
-    <p>Bounce Rate</p>
-    <div class="w3-grey">
-      <div class="w3-container w3-center w3-padding w3-red" style="width:75%">75%</div>
-    </div>
-  </div>
-  <hr>
--->
   <div class="w3-container" id="accounts-table">
     <h5><b><i class="fa fa-users"></i> Accounts:</b></h5>
     <div class="account-control">
@@ -127,12 +121,12 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <span id="error-message"></span>
     </div>    
     <div class="w3-responsive">
-      <table id="jsonTable" class="w3-table-all w3-hoverable">
+      <table id="jsonTable" class="w3-table-all w3-hoverable display">
         <input tabindex="4" class="w3-input w3-border w3-padding" type="text" placeholder="Search for username.." id="search" onkeyup="filter()">
           <tr class="w3-black">
               <th onclick="sortTableNumber(0)">#</th>
               <th id="th-username" onclick="sortTable(1)">Username</th>
-              <th onclick="sortTableNumber(2)">ECR</th>
+              <th onclick="sortTableNumber(7)">ECR</th>
               <th onclick="sortTable(3)">Rank</th>
               <th onclick="sortTableNumber(4)">Rating</th>
               <th onclick="sortTableNumber(5)">Power</th>
@@ -140,29 +134,37 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
               <th onclick="sortTableNumber(7)">SPS</th>
               <th onclick="sortTableNumber(8)">Staked SPS</th>
               <th onclick="sortTable(9)">Last Team</th>
-              <th>Win Rate <p>(Last 50 Battles)</p></th>
+              <th>Win Rate <br>(Last 50 Battles)</th>
               <th>Last Battle</th>
               <th>Action</th>
           </tr>
       </table><br>
     </div>
   
-    <div id="updates" class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red">
+    <div id="updates" class="w3-panel w3-topbar w3-bottombar w3-border-green w3-pale-green">
       <h2><b>Updates:</b></h2>
+      
+      <h3><b>v2.1 Updates</b></h3>
+      <p><b>Important Notice: If you have used the previous version, you would need to add your accounts again</b><br>
+      Added the DEC earned from the Last Team if you won.<br>
+      Added color to the DEC earned. Last 50 Battles and Last Team<br>
+      Some UI improvements<br>
+      Added Currency equivalent in USD and PHP for DEC and SPS<br>
+      Rework some code<br></p>
 
       <h3><b>v2.0.1 Updates</b></h3>
       <p>Added entering multiple accounts at once functionality. You could now
         enter multiple accounts by separating it with comma, for example, if you want to enter "decreo" and "dadee",
-        just type "decreo,dadee".
-      </p>
-      <p>Moved the updates from the sidebar to the bottom of the page just before the footer, and added "Updates" in the main menu.</p>
+        just type "decreo,dadee".<br>
+      Moved the updates from the sidebar to the bottom of the page just before the footer, and added "Updates" in the main menu.<br>
+      Removed the confirmation message when an account is added</p>
 
       <h3><b>v2.0 Updates</b></h3>
-      <p>New look!</p>
-      <p>Added search functionality for accounts username</p>
-      <p>Added Dashboard. Show's the total DEC, SPS and Stake SPS. Still on process PHP and USD Prices</p>
-      <p>fixed bug that allow undefined accounts</p>
-      <p>Replace credits with Last Team. Using this you will be able to see if your bot did not submit a team,
+      <p>New look!<br>
+      Added search functionality for accounts username<br>
+      Added Dashboard. Show's the total DEC, SPS and Stake SPS. Still on process PHP and USD Prices<br>
+      fixed bug that allow undefined accounts<br>
+      Replace credits with Last Team. Using this you will be able to see if your bot did not submit a team,
         this will also indicate if the opponent did not submit a team, in regular play it will show the last 
         splinter team and if you win or loss.
       </p><br>
@@ -221,6 +223,7 @@ function w3_close() {
 
 <script>
   document.getElementById("settings").addEventListener("click", function() { alert("This will be available in the future") })
+  document.getElementById("currency").addEventListener("change", function() {updateCurrency()});
 </script>
 
 <script>
@@ -242,7 +245,7 @@ function w3_close() {
       }
     }
   }
-  </script>
+</script>
 
 </body>
 </html>

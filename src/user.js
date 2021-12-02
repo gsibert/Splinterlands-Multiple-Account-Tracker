@@ -21,7 +21,6 @@ function addLocalStorage(){
     //console.log(usernames);
     //loop thru the input to enter the account
     for (let i = 0; i < usernames.length; i++) {
-        console.log(usernames[i] + "This is from the for loop")
         let playerData = getPlayerData(usernames[i]);
         playerData.then((data) => {
             //console.log(!(data.name === undefined))
@@ -31,7 +30,20 @@ function addLocalStorage(){
                 //add row
                 createTable(usernames[i]);
                 //create key and value using userinput
-                localStorage.setItem(usernames[i], usernames[i]);
+                //localStorage.setItem(usernames[i], usernames[i]);
+                //new!!!!!! create an array to contain the accounts
+                let oldData = [] 
+                let local = localStorage.getItem("accounts");
+                if ( local == null ) {
+                    oldData.push(usernames[i]);
+                    oldData = oldData.filter(function (el) { return el != null; });
+                    localStorage.setItem("accounts", oldData)
+                } else {
+                    oldData.push(localStorage.getItem("accounts"));
+                    oldData.push(usernames[i]);
+                    oldData = oldData.filter(function (el) { return el != null; });
+                    localStorage.setItem("accounts", oldData);
+                }
             } else {
                 //return error message to user
                 alert(usernames[i] + " is not a valid username");
@@ -39,18 +51,27 @@ function addLocalStorage(){
         })
     }
     //clear the value of input
-    usernameInput.value = "";  
+    usernameInput.value = "";
+    setTimeout(function(){ currencyCards() }, 5000);  
     //localStorage.clear();
     //localStorage.setItem(usernameInput.value, 'account')*/    
 }
 
 
 function deleteLocalStorage(username){
-    localStorage.removeItem(username);    
+    let oldData = []; 
+    oldData.push(localStorage.getItem("accounts"));
+    oldData = oldData.toString().split(",")
+    let unsernameIndex = oldData.indexOf(username);
+    oldData.splice(unsernameIndex,1);
+    oldData = oldData.filter(function (el) { return el != null; });
+    localStorage.setItem("accounts", oldData);
 }
 
-function clearLocalStorage(username){
-    localStorage.clear(username);
+
+function clearLocalStorage(){
+    localStorage.removeItem("accounts");
+    //localStorage.clear();
     location.reload();
 }
 
@@ -66,21 +87,42 @@ function deleteBalance(balance,id) {
     document.getElementById(id).innerHTML = parseFloat(targetFloat -= balance).toFixed(2);
 }
 
-async function coinGecoPh(coinID,elementId,coinAmmount) {
-    var price = await $.getJSON(`https://api.coingecko.com/api/v3/coins/${coinID}`)
-	.then((data) => {return data.market_data.current_price.php}); 
-    console.log(price)
-    price = parseFloat(price);
-    priceInPhp = price * coinAmmount;
-    document.getElementById(elementId).innerHTML = "(" + price + " PHP)"
+
+function currencyCards() {
+      if (localStorage.getItem("currency")) {
+        console.log("Currency is set")
+      } else {
+        let defaultCurrency = document.getElementById("currency").value;
+        localStorage.setItem("currency",defaultCurrency)
+      }
+
+      try {
+        let currency = localStorage.getItem("currency");
+        coinGecoPrice(currency, "dark-energy-crystals", "decCurrency", "dec", 5)
+        coinGecoPrice(currency, "splinterlands","spsCurrency","sps", 5)
+        coinGecoPrice(currency, "splinterlands","spspCurrency","spsp", 5)
+      } catch (e) {
+        console.log(e);
+        coinGecoPrice("usd", "dark-energy-crystals","decCurrency","dec", 5)
+        coinGecoPrice("usd", "splinterlands","spsCurrency","sps", 5)
+        coinGecoPrice("usd", "splinterlands","spspCurrency","spsp", 5)
+      };
 }
 
-async function coinGecoUsd(coinID,elementId,coinAmmount) {
-    var price = await $.getJSON(`https://api.coingecko.com/api/v3/coins/${coinID}`)
-	.then((data) => {return data.market_data.current_price.usd}); 
-    console.log(price);
+
+async function coinGecoPrice(currency,coinID,elementId,coinAmmount,decimals) {
+    var price = await $.getJSON(`https://api.coingecko.com/api/v3/simple/price?ids=${coinID}&vs_currencies=${currency}`)
+	.then((data) => {return data[coinID][currency]}); 
     price = parseFloat(price);
-    priceInUsd = price * coinAmmount;
-    document.getElementById(elementId).innerHTML = "(" + price + " USD)";
+    coinAmmount = parseFloat(document.getElementById(coinAmmount).innerHTML);
+    priceInCurr = price * coinAmmount;
+    document.getElementById(elementId).innerHTML = "(" + priceInCurr.toFixed(decimals) + " " + currency.toUpperCase() + ")"
+}
+
+
+function updateCurrency() {
+    let currency = document.getElementById("currency").value;
+    localStorage.setItem("currency", currency);
+    currencyCards();
 }
 

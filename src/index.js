@@ -1,22 +1,26 @@
 function main(){
-   /* This is working for local run only - might not work anymore with the change in functions
-   $.getJSON('src/users.json').done(function(data){ 
-      
-      for (var i = 0; i < data.length; i++) {
-         var index = i + 1 
-         createTable( data[i], index );
-         console.log(index)
-      }      
-   }); */
-
-   //getWinRate("dadee");
    
-   let nextValue;
-   for (let i = 0; i < localStorage.length; i++){
-      nextValue = localStorage.getItem(localStorage.key(i));
-      createTable(nextValue);
+   let usernames = [];
+   let local = localStorage.getItem("accounts");
+   if (local == null ) {
+      
+   } else {
+      usernames.push(localStorage.getItem("accounts"));
+      usernames = usernames.toString().split(",");
+      for (let i = 0; i < usernames.length; i++) {
+         createTable(usernames[i]);
+      }
+      setTimeout(function(){ currencyCards() }, 5000);
    }
- 
+
+   //set currency
+   if (localStorage.getItem("currency")) {
+      document.getElementById("currency").value = localStorage.getItem("currency");
+   } else {
+      let defaultCurrency = document.getElementById("currency").value;
+      localStorage.setItem("currency",defaultCurrency)
+   }
+
 }
 
  /*To do:
