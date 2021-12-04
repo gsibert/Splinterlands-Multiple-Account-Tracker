@@ -18,10 +18,18 @@ function createTable(player) {
       
       //player data
       var username = data[0].name, 
-      ecr = parseFloat(parseFloat(data[0].capture_rate)/10000*100).toFixed(2),
       rank = league(data[0].league),
       rating = data[0].rating,
       power = data[0].collection_power;
+
+      var lastCaptureRate = data[1].find(x => x.token === "ECR").balance, 
+          lastRewardTime = new Date(data[1].find(x => x.token === "ECR").last_reward_time);
+      let ecr = lastCaptureRate + ((new Date($.now()).getTime() - lastRewardTime.getTime())/1000 * 0.02893519);
+      ecr = (Math.min(ecr, 10000) / 100).toFixed(2);
+      console.log(lastCaptureRate + " last cap rate");
+      console.log(lastRewardTime.getTime() + " last reward time")
+      console.log(new Date($.now()).getTime() + " now")
+      console.log(((new Date($.now()).getTime() - lastRewardTime.getTime() / 1000) * 0.0868 ))
 
       //player balance
       try {

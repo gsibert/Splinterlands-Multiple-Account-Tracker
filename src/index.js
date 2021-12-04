@@ -20,6 +20,13 @@ function main(){
       let defaultCurrency = document.getElementById("currency").value;
       localStorage.setItem("currency",defaultCurrency)
    }
+   /*
+   let usernames = [];
+   usernames.push(localStorage.getItem("accounts"));
+   usernames = usernames.toString().split(",");
+   for (let i = 0; i < usernames.length; i++) {
+      console.log(usernames[i])
+   }*/
 
 }
 
