@@ -24,12 +24,9 @@ function createTable(player) {
 
       var lastCaptureRate = data[1].find(x => x.token === "ECR").balance, 
           lastRewardTime = new Date(data[1].find(x => x.token === "ECR").last_reward_time);
-      let ecr = lastCaptureRate + ((new Date($.now()).getTime() - lastRewardTime.getTime())/1000 * 0.02893519);
-      ecr = (Math.min(ecr, 10000) / 100).toFixed(2);
-      console.log(lastCaptureRate + " last cap rate");
-      console.log(lastRewardTime.getTime() + " last reward time")
-      console.log(new Date($.now()).getTime() + " now")
-      console.log(((new Date($.now()).getTime() - lastRewardTime.getTime() / 1000) * 0.0868 ))
+      //let ecr = lastCaptureRate + ((new Date($.now()).getTime() - lastRewardTime.getTime())/1000 * 0.02893519);
+      //ecr = (Math.min(ecr, 10000) / 100).toFixed(2);
+      let ecr = (calculateECR(lastCaptureRate, lastRewardTime)/100).toFixed(2);
 
       //player balance
       try {
@@ -340,4 +337,9 @@ function sortTable(n) {
       }
     }
   }
+}
+
+
+function calculateECR(capture_rate, last_reward_time) {
+  return Math.min((isNaN(parseInt(capture_rate)) ? 10000 : capture_rate) + (Date.now() - new Date(last_reward_time)) / 3000 * 0.0868, 10000)
 }
