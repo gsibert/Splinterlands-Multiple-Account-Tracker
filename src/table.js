@@ -1,7 +1,3 @@
-/*To do:
-  * change credits to Last played summoner or element
-*/
-
 var api3 = 'https://game-api.splinterlands.io',
     api2 = 'https://api.splinterlands.io',
     api1 = 'https://api2.splinterlands.com',
@@ -85,7 +81,7 @@ function createTable(player) {
         console.log(e)
         try {
           if(data[2].battles[0].winner == player){
-            team = "The enemy did not pick a team <br>or surrendered - WIN";
+            team = "The enemy did not pick a team <br>or surrendered - " + wl ;
           } else {
             team = "You did not pick a team <br>or you surrendered - LOSE";
           }
