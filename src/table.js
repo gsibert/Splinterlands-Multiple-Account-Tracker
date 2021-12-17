@@ -3,13 +3,13 @@ var api3 = 'https://game-api.splinterlands.io',
     api1 = 'https://api2.splinterlands.com',
     api = api1;
 
-function createTable(player) {
+async function createTable(player) {
     var tbl = document.getElementById("jsonTable");
     let playerBattleHistory = getBattleHistory(player);
     let playerData = getPlayerData(player);
     let playerBalance = getPlayerBalance(player); 
 
-    Promise.all([playerData, playerBalance, playerBattleHistory]).then((data) => {
+    await Promise.all([playerData, playerBalance, playerBattleHistory]).then((data) => {
       //let's do the magic here
       
       //player data

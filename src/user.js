@@ -3,7 +3,7 @@
     * Add individual player details tab
     * In individual player add both last 50 battles and overall, for main just the last 50 battles 
     * localStorage - do not allow undefined - done
-    * add summary of accounts functions
+    * add summary of accounts functions done
     * add validation error css
 */
 
@@ -12,7 +12,7 @@ var api3 = 'https://game-api.splinterlands.io',
     api1 = 'https://api2.splinterlands.com',
     api = api1;
 
-function addLocalStorage(){
+async function addLocalStorage(){
     //get the input
     var usernameInput = document.getElementById("uname");
     //console.log(usernameInput.value);
@@ -21,17 +21,13 @@ function addLocalStorage(){
     //console.log(usernames);
     //loop thru the input to enter the account
     for (let i = 0; i < usernames.length; i++) {
-        let playerData = getPlayerData(usernames[i]);
-        playerData.then((data) => {
+        let playerData = await getPlayerData(usernames[i]).then((data) => {
             //console.log(!(data.name === undefined))
             if (!(data.name === undefined)) {
                 //clear error message
                 document.getElementById("error-message").innerHTML = "";
                 //add row
                 createTable(usernames[i]);
-                //create key and value using userinput
-                //localStorage.setItem(usernames[i], usernames[i]);
-                //new!!!!!! create an array to contain the accounts
                 let oldData = [] 
                 let local = localStorage.getItem("accounts");
                 if ( local == null ) {
@@ -125,4 +121,3 @@ function updateCurrency() {
     localStorage.setItem("currency", currency);
     currencyCards();
 }
-
