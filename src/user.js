@@ -106,12 +106,23 @@ function currencyCards() {
 }
 
 
-async function coinGecoPrice(currency,coinID,elementId,coinAmmount,decimals) {
+async function coinGecoPriceOld(currency,coinID,elementId,coinAmmount,decimals) {
     var price = await $.getJSON(`https://api.coingecko.com/api/v3/simple/price?ids=${coinID}&vs_currencies=${currency}`)
 	.then((data) => {return data[coinID][currency]}); 
     price = parseFloat(price);
     coinAmmount = parseFloat(document.getElementById(coinAmmount).innerHTML);
     priceInCurr = price * coinAmmount;
+    document.getElementById(elementId).innerHTML = "(" + priceInCurr.toFixed(decimals) + " " + currency.toUpperCase() + ")"
+}
+
+async function coinGecoPrice(currency,coinID,elementId,coinAmmount,decimals) {
+    var price = await $.getJSON(`https://api.coingecko.com/api/v3/coins/${coinID}`)
+	.then((data) => {return data["market_data"]["current_price"][currency]}); 
+    price = parseFloat(price);
+    //console.log("current price in " + currency + " is " + price)
+    coinAmmount = parseFloat(document.getElementById(coinAmmount).innerHTML);
+    priceInCurr = price * coinAmmount;
+    //alert(coinID + " Price is " + price)
     document.getElementById(elementId).innerHTML = "(" + priceInCurr.toFixed(decimals) + " " + currency.toUpperCase() + ")"
 }
 
