@@ -12,6 +12,62 @@ var api3 = 'https://game-api.splinterlands.io',
     api1 = 'https://api2.splinterlands.com',
     api = api1;
 
+
+async function getPlayerData(player) {
+    let res;
+    try {
+        res = await $.getJSON(`${api}/players/details?name=${player}`);
+        return res;
+    } catch (error) {
+      console.log(error);
+    }    
+}
+
+
+async function getPlayerBalance(player) {
+  let res 
+  try {
+      res = await $.getJSON(`${api}/players/balances?username=${player}`);
+      return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+async function getBattleHistory(player) {
+  let res 
+  try {
+      res = $.getJSON(`${api}/battle/history?player=${player}`);
+      return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//rentvsgain
+async function getCards(player) {
+  let res 
+  try {
+      res = $.getJSON(`${api}/cards/collection/${player}`);
+      return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//rentvsgain
+async function getDecTransactions(player) {
+  let res 
+  try {
+      res = $.getJSON(`${api}/players/balance_history?username=${player}&token_type=DEC`);
+      return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 async function addLocalStorage(){
     //get the input
     var usernameInput = document.getElementById("uname");
@@ -97,12 +153,38 @@ function currencyCards() {
         coinGecoPrice(currency, "dark-energy-crystals", "decCurrency", "dec", 5)
         coinGecoPrice(currency, "splinterlands","spsCurrency","sps", 5)
         coinGecoPrice(currency, "splinterlands","spspCurrency","spsp", 5)
+        coinGecoPrice(currency, "dark-energy-crystals", "decPrice", "one", 5)
+        coinGecoPrice(currency, "splinterlands","spsPrice","one", 5)
       } catch (e) {
         console.log(e);
         coinGecoPrice("usd", "dark-energy-crystals","decCurrency","dec", 5)
         coinGecoPrice("usd", "splinterlands","spsCurrency","sps", 5)
         coinGecoPrice("usd", "splinterlands","spspCurrency","spsp", 5)
+        coinGecoPrice("usd", "dark-energy-crystals", "decPrice", "one", 5)
+        coinGecoPrice("usd", "splinterlands","spsPrice","one", 5)
       };
+}
+
+function incomeCurrencyCards() {
+  if (localStorage.getItem("currency")) {
+    console.log("Currency is set")
+  } else {
+    let defaultCurrency = document.getElementById("currency").value;
+    localStorage.setItem("currency",defaultCurrency)
+  }
+
+  try {
+    let currency = localStorage.getItem("currency");
+    coinGecoPrice(currency, "dark-energy-crystals", "earnedCurrency", "earned", 5)
+    coinGecoPrice(currency, "dark-energy-crystals","rentCurrency","rent", 5)
+    coinGecoPrice(currency, "dark-energy-crystals","netCurrency","net", 5)
+  } catch (e) {
+    console.log(e);
+    coinGecoPrice("usd", "dark-energy-crystals", "earnedCurrency", "earned", 5)
+    coinGecoPrice("usd", "dark-energy-crystals","rentCurrency","rent", 5)
+    coinGecoPrice("usd", "dark-energy-crystals","netCurrency","net", 5)
+    
+  };
 }
 
 

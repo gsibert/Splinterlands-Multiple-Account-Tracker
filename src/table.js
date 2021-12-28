@@ -166,42 +166,10 @@ async function createTable(player) {
           actionCell.innerHTML = action;
         }, 1000 );
       }
-      addBalance(1,"total-accounts")        
+      addBalance(1,"total-accounts")
+      currencyCards()        
     });
     
-}
-
-
-async function getPlayerData(player) {
-    let res;
-    try {
-        res = await $.getJSON(`${api}/players/details?name=${player}`);
-        return res;
-    } catch (error) {
-      console.log(error);
-    }    
-}
-
-
-async function getPlayerBalance(player) {
-  let res 
-  try {
-      res = await $.getJSON(`${api}/players/balances?username=${player}`);
-      return res;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-
-async function getBattleHistory(player) {
-  let res 
-  try {
-      res = $.getJSON(`${api}/battle/history?player=${player}`);
-      return res;
-  } catch (error) {
-    console.log(error);
-  }
 }
 
 

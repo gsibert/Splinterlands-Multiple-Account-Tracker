@@ -15,13 +15,14 @@
 <script src="src/table.js"></script>
 <script src="src/index.js"></script>
 <script src="src/user.js"></script>
+<script src="src/incomeTable.js"></script>
 
 <!--for sorting-->
 
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
 </style>
-<body class="w3-light-grey" onload="main();"> 
+<body class="w3-light-grey" onload="incomePage();"> 
 
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
@@ -40,8 +41,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
     <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-dashboard fa-fw"></i>  Main Dashboard</a>
     <a href="#accounts-table" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Accounts</a>
-    <a href="#updates" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-pencil-square fa-fw"></i>  Updates</a>
-    <a href="./netIncome.html" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-globe fa-fw"></i>  Net Income</a>
+    <a href="./index.html#updates" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-pencil-square fa-fw"></i>  Updates</a>
+    <a href="./index.html" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-globe fa-fw"></i>  Main Tracker</a>
     <a href="https://decreo17.github.io/splinterlands-accounts-tracker/" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-globe fa-fw"></i>  Simplified Tracker</a>
     <a href="#" id="settings" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a>
     <label for="currency" class="fa fa-dollar fa-fw w3-padding"></label>
@@ -121,13 +122,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
     <div class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red message">
-
+      
     </div>
     <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
   </header>
-  <div id="one" style="display: none;">1</div>
+
   <div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-third w3-padding">
+    <div class="w3-quarter">
       <div class="w3-container w3-red w3-padding-16">
         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
         <div class="w3-right accounts">
@@ -138,59 +139,37 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
         <h4>TOTAL ACCOUNTS</h4>
       </div>
     </div>
-    <div class="w3-third w3-padding">
+    <div class="w3-quarter">
       <div class="w3-container w3-purple w3-padding-16">
         <div class="w3-left"><i class="fa fa-btc w3-xxxlarge"></i></div>
         <div class="w3-right">
-          <h3 id="dec">0</h3>
-          <span id="decCurrency">(0.00)</span>
+          <h3 id="earned">0</h3>
+          <span id="earnedCurrency">(0.00)</span>
         </div>
         <div class="w3-clear"></div>
-        <h4>TOTAL DEC</h4>
+        <h4>TOTAL EARNED</h4>
       </div>
     </div>
-    <div class="w3-third w3-padding">
+    <div class="w3-quarter">
       <div class="w3-container w3-green w3-padding-16">
         <div class="w3-left"><i class="fa fa-btc w3-xxxlarge"></i></div>
         <div class="w3-right">
-          <h3 id="sps">0</h3>
-          <span id="spsCurrency">(0.00)</span>
+          <h3 id="rent">0</h3>
+          <span id="rentCurrency">(0.00)</span>
         </div>
         <div class="w3-clear"></div>
-        <h4>TOTAL SPS</h4>
+        <h4>TOTAL RENT</h4>
       </div>
     </div>
-    <div class="w3-third w3-padding">
+    <div class="w3-quarter">
       <div class="w3-container w3-orange w3-text-white w3-padding-16">
         <div class="w3-left"><i class="fa fa-heart w3-xxxlarge"></i></div>
         <div class="w3-right">
-          <h3 id="spsp">0</h3>
-          <span id="spspCurrency">(0.00)</span>
+          <h3 id="net">0</h3>
+          <span id="netCurrency">(0.00)</span>
         </div>
         <div class="w3-clear"></div>
-        <h4>TOTAL STAKED SPS</h4>
-      </div>
-    </div>
-    <div class="w3-third w3-padding">
-      <div class="w3-container w3-purple w3-padding-16">
-        <div class="w3-left"><i class="fa fa-btc w3-xxxlarge"></i></div>
-        <div class="w3-right accounts">
-          <h3 id="decPrice">0</h3>
-          <br>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>DEC Price</h4>
-      </div>
-    </div>
-    <div class="w3-third w3-padding">
-      <div class="w3-container w3-green w3-padding-16">
-        <div class="w3-left"><i class="fa fa-btc w3-xxxlarge"></i></div>
-        <div class="w3-right accounts">
-          <h3 id="spsPrice">0</h3>
-          <br>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>SPS Price</h4>
+        <h4>NET INCOME</h4>
       </div>
     </div>
   </div>
@@ -198,20 +177,20 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
   <div class="w3-container" id="accounts-table">
     <h5><b><i class="fa fa-users"></i> Accounts:</b></h5>
     <div class="account-control">
-        <input type="text" tabindex="1" id="uname" name="uname" class="w3-input w3-border w3-round-large" placeholder="Hive username here. Enter multiple accounts separated by comma">
-        <input type="button" tabindex="2" id="add" value="Add" class="w3-button w3-green" onclick="addLocalStorage()" >
-        <input type="button" tabindex="3" value="Clear all" class="w3-button w3-red" onclick="clearLocalStorage()" >
+        <input style="display: none;" type="text" tabindex="1" id="uname" name="uname" class="w3-input w3-border w3-round-large" placeholder="Hive username here">
+        <input style="display: none;" type="button" tabindex="2" id="add" value="Add" class="w3-button w3-green" onclick="createIncomeTable('leo-black')">
         <span id="error-message"></span>
     </div>    
     <div class="w3-responsive">
-      <table id="jsonTable" class="w3-table-all w3-hoverable display">
+      <table id="incomeTable" class="w3-table-all w3-hoverable display">
         <input tabindex="4" class="w3-input w3-border w3-padding" type="text" placeholder="Search for username.." id="search" onkeyup="filter()">
           <tr class="w3-black">
               <th onclick="sortTableNumber(0)">#</th>
               <th id="th-username" onclick="sortTable(1)">Username</th>
-              <th onclick="sortTable(2)">ECR</th>
-              <th onclick="sortTable(3)">Rank</th>
-              <th onclick="sortTableNumber(4)">Rating</th>
+              <th onclick="sortTableNumber(2)">Dec Earned</th>
+              <th onclick="sortTableNumber(3)">Rent Per Day</th>
+              <th onclick="sortTableNumber(4)">Net Income</th>
+              <!--
               <th onclick="sortTableNumber(5)">Power</th>
               <th onclick="sortTableNumber(6)">In-game DEC</th>
               <th onclick="sortTableNumber(7)">SPS</th>
@@ -219,50 +198,24 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
               <th onclick="sortTable(9)">Last Team</th>
               <th>Win Rate <br>(Last 50 Battles)</th>
               <th>Last Battle</th>
+              
               <th>Action</th>
+              -->
           </tr>
       </table><br>
     </div>
-  
+    
     <div id="updates" class="w3-panel w3-topbar w3-bottombar w3-border-green w3-pale-green">
-      <h2><b>Updates:</b></h2>
+      <h2><b>About this page:</b></h2>
 
-      <h3><b>v3.0</b></h3>
       <p>
-        Changed the font for better reading<br>
-        Added DEC and SPS price in the dashboard, adjusted the appearance a bit<br>
-        Added the Net Income page where you could see your net income per account and summary of the accounts added in the tracker
+        This page will hold the same account held in the main tracker.
+        The rent is based on the current daily rent while the DEC earned was based on the last 100 transaction
+        filtered down to the last 24 hrs rewards to get the most accurate DEC earned, this will only be inaccurate if
+        you have more than 100 DEC related transaction in the last 24 hrs.<br><br>
+
+        The total showed might be different if you will manually compute each account due to the decimal factor.
       </p>
-
-      <h3><b>v2.2 Updates</b></h3>
-      <p>Fix bug with account arrangement! The accounts now will load on the same arrangement you enter it!<br>
-      ECR now is the same with in-game ECR</p>
-      
-      <h3><b>v2.1 Updates</b></h3>
-      <p><b>Important Notice: If you have used the previous version, you would need to add your accounts again</b><br>
-      Added the DEC earned from the Last Team if you won.<br>
-      Added color to the DEC earned. Last 50 Battles and Last Team<br>
-      Some UI improvements<br>
-      Added Currency equivalent in USD and PHP for DEC and SPS<br>
-      Rework some code<br></p>
-
-      <h3><b>v2.0.1 Updates</b></h3>
-      <p>Added entering multiple accounts at once functionality. You could now
-        enter multiple accounts by separating it with comma, for example, if you want to enter "decreo" and "dadee",
-        just type "decreo,dadee".<br>
-      Moved the updates from the sidebar to the bottom of the page just before the footer, and added "Updates" in the main menu.<br>
-      Removed the confirmation message when an account is added</p>
-
-      <h3><b>v2.0 Updates</b></h3>
-      <p>New look!<br>
-      Added search functionality for accounts username<br>
-      Added Dashboard. Show's the total DEC, SPS and Stake SPS. Still on process PHP and USD Prices<br>
-      fixed bug that allow undefined accounts<br>
-      Replace credits with Last Team. Using this you will be able to see if your bot did not submit a team,
-        this will also indicate if the opponent did not submit a team, in regular play it will show the last 
-        splinter team and if you win or loss.
-      </p><br>
-  
     </div>
 
   <!-- Footer -->
@@ -325,7 +278,7 @@ function w3_close() {
     var input, filter, table, tr, td, i;
     input = document.getElementById("search");
     filter = input.value.toUpperCase();
-    table = document.getElementById("jsonTable");
+    table = document.getElementById("incomeTable");
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
       td = tr[i].getElementsByTagName("td")[1];
