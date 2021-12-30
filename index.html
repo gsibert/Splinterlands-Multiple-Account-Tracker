@@ -120,6 +120,20 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
 
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
+    <!--From https://spstats.arnowong.repl.co/-->
+    <div class="w3-panel w3-topbar w3-bottombar w3-border-gray w3-pale-gray">
+      <div class="card h-100">
+          <div style="text-align: center">
+            <span id="name_season"></span>
+            <span id="days"></span> days
+            <span id="hours"></span> Hours
+            <span id="minutes"></span> Minutes
+            <span id="seconds"></span> Seconds
+          </div>
+      </div>
+    </div>
+    <!--end-->
+
     <div class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red message">
 
     </div>
@@ -339,6 +353,42 @@ function w3_close() {
       }
     }
   }
+</script>
+
+<script>
+  //from https://spstats.arnowong.repl.co/
+  $.getJSON('https://steemmonsters.com/settings', function(data) {
+    console.log('/settings', data);
+    //var settings = JSON.parse(data);
+
+    const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
+    document.getElementById("name_season").innerText = data.season.name + " END IN : "
+
+    let birthday = data.season.ends,
+      countDown = new Date(birthday).getTime(),
+      x = setInterval(function() {    
+
+        let now = new Date().getTime(),
+            distance = countDown - now - 300000 ;
+
+            document.getElementById("days").innerText = Math.floor(distance / (day)),
+            document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour)),
+            document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute)),
+            document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
+
+        //do something later when date is reached
+        if (distance < 0) {
+          //let headline = document.getElementById("headline"),
+            //  countdown = document.getElementById("countdown"),
+              //content = document.getElementById("content");
+
+          clearInterval(x);
+        }
+        //seconds
+      }, 0)
+
+  })
+
 </script>
 
 </body>
