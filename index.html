@@ -378,6 +378,9 @@ function w3_close() {
 
         //do something later when date is reached
         if (distance < 0) {
+          setInterval(function() {
+            location.reload();
+          }, 30000)
           //let headline = document.getElementById("headline"),
             //  countdown = document.getElementById("countdown"),
               //content = document.getElementById("content");
