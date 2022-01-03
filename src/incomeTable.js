@@ -14,13 +14,14 @@ async function createIncomeTable(player) {
     await Promise.all([cards, decTransactions]).then((data) => {
       let action = `<button class="w3-red" onclick = "deleteRow(this)">delete</button>`;
       let cards = data[0]["cards"]
-      let rented = cards.filter(c=>c.market_listing_type === "RENT").map(x=>rent+=parseFloat(x.buy_price));
+      let rented = cards.filter(c=>c.market_listing_type === "RENT").filter(c=>c.delegated_to === player).map(x=>rent+=parseFloat(x.buy_price));
       addBalance(rent,"rent");
       console.log("Rent amount " + rent)
+      //console.log(rented);
       
       let last24hrs = new Date(Date.now() - 86400000);
       let last24hrsRewards = data[1].filter(transaction => Date.parse(transaction.created_date) > last24hrs)
-      let decTransactions =data[1].filter(transaction => transaction.type === "dec_reward").filter(transaction => Date.parse(transaction.created_date) > last24hrs)
+      let decTransactions = data[1].filter(transaction => transaction.type === "dec_reward").filter(transaction => Date.parse(transaction.created_date) > last24hrs)
       let earnings = decTransactions.map(x => earned += parseFloat(x.amount));
       addBalance(earned,"earned");
       console.log("Earned " + earned)

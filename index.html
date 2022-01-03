@@ -135,6 +135,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
     <!--end-->
 
     <div class="w3-panel w3-topbar w3-bottombar w3-border-red w3-pale-red message">
+      <div id="error-message"><b>Warning!</b></div>
 
     </div>
     <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
@@ -215,7 +216,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Roboto", sans-serif}
         <input type="text" tabindex="1" id="uname" name="uname" class="w3-input w3-border w3-round-large" placeholder="Hive username here. Enter multiple accounts separated by comma">
         <input type="button" tabindex="2" id="add" value="Add" class="w3-button w3-green" onclick="addLocalStorage()" >
         <input type="button" tabindex="3" value="Clear all" class="w3-button w3-red" onclick="clearLocalStorage()" >
-        <span id="error-message"></span>
+        <!--<span id="error-message"></span>-->
     </div>    
     <div class="w3-responsive">
       <table id="jsonTable" class="w3-table-all w3-hoverable display">

@@ -2,17 +2,28 @@ function main(){
    
    let usernames = [];
    let local = localStorage.getItem("accounts");
+
    if (local == null ) {
       
    } else {
       usernames.push(localStorage.getItem("accounts"));
       usernames = usernames.toString().split(",");
-      (async () => {
+      /*(async () => {
          for (let user of usernames) {
-           newRow = await createTable(user, -1)
+            newRow = await createTable(user, -1)
+         }
+       })();*/
+       (async () => {
+         for (let user of usernames) {
+            try {
+               newRow = await createTable(user, -1)
+            } catch (e) {
+               console.log("There was an error while processing " + user + "\n" + e)
+               document.getElementsByClassName("message")[0].style.display = "block";
+               document.getElementById("error-message").innerHTML += "<br>There was an error while processing " + user + " | " + e
+            }
          }
        })();
-
    }
 
    //set currency
@@ -35,10 +46,15 @@ function incomePage(){
       usernames = usernames.toString().split(",");
       (async () => {
          for (let user of usernames) {
-           newRow = await createIncomeTable(user)
+            try {
+               newRow = await createIncomeTable(user)
+            } catch (e) {
+               console.log("There was an error while processing " + user + "\n" + e)
+               document.getElementsByClassName("message")[0].style.display = "block";
+               document.getElementById("error-message").innerHTML += "<br>There was an error while processing " + user + " | " + e
+            }
          }
        })();
-
    }
 
    //set currency
@@ -48,5 +64,4 @@ function incomePage(){
       let defaultCurrency = document.getElementById("currency").value;
       localStorage.setItem("currency",defaultCurrency)
    }
-
 }
